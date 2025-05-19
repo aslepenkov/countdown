@@ -1,0 +1,271 @@
+            .-/+oossssoo+/-.               asus-tuf@asus-tuf
+        `:+ssssssssssssssssss+:`           -----------------
+      -+ssssssssssssssssssyyssss+-         OS: Ubuntu 22.04.3 LTS on Windows 10 x86_64
+    .ossssssssssssssssssdMMMNysssso.       Kernel: 5.15.167.4-microsoft-standard-WSL2
+   /ssssssssssshdmmNNmmyNMMMMhssssss/      Uptime: 10 secs
+  +ssssssssshmydMMMMMMMNddddyssssssss+     Packages: 1551 (dpkg), 6 (snap)
+ /sssssssshNMMMyhhyyyyhmNMMMNhssssssss/    Shell: zsh 5.8.1
+.ssssssssdMMMNhsssssssssshNMMMdssssssss.   Theme: Adwaita [GTK3]
++sssshhhyNMMNyssssssssssssyNMMMysssssss+   Icons: Adwaita [GTK3]
+ossyNMMMNyMMhsssssssssssssshmmmhssssssso   Terminal: Windows Terminal
+ossyNMMMNyMMhsssssssssssssshmmmhssssssso   CPU: 13th Gen Intel i7-13620H (16) @ 2.918GHz
++sssshhhyNMMNyssssssssssssyNMMMysssssss+   GPU: 2f39:00:00.0 Microsoft Corporation Device 008e
+.ssssssssdMMMNhsssssssssshNMMMdssssssss.   Memory: 648MiB / 7758MiB
+ /sssssssshNMMMyhhyyyyhdNMMMNhssssssss/
+  +sssssssssdmydMMMMMMMMddddyssssssss+
+   /ssssssssssshdmNNNNmyNMMMMhssssss/
+    .ossssssssssssssssssdMMMNysssso.
+      -+sssssssssssssssssyyyssss+-
+        `:+ssssssssssssssssss+:`
+            .-/+oossssoo+/-.
+
+ asus-tuf@asus-tuf  ~  ls
+aws-nuke  dev  downloads  ec2-backup  home_backup.zip  jupyter  keys  output.gif
+ asus-tuf@asus-tuf  ~  cd dev
+ asus-tuf@asus-tuf  ~/dev  ls
+EVA                    aslepenkov                dotnetcv       intube-master  polaroid    tg-video-uploader
+EVAA                   colab                     faceswap       jupyter        scripts     tododailybot
+EVAAI-Test-assignment  colab-frontend-ai-ui      fn-status-bot  mistral        tg-anal     woven
+ai-shell               diffusers-image-outpaint  hwyd-next      pixi-monopoly  tg-pic-bot  yt
+ asus-tuf@asus-tuf  ~/dev  cd tg-pic-bot
+ asus-tuf@asus-tuf  ~/dev/tg-pic-bot   master ±  ls
+Dockerfile  app.py  config.dev.json  config.json  logs  query_counts.json  requirements.txt
+ asus-tuf@asus-tuf  ~/dev/tg-pic-bot   master ±  cat requirements.txt
+google-api-python-client==2.93.0
+aiogram%                                                                                                                 asus-tuf@asus-tuf  ~/dev/tg-pic-bot   master ±  cat app.py
+import os
+import asyncio
+import json
+import logging
+import uuid
+from aiogram import Bot, Dispatcher, types, Router
+from aiogram.types import InlineQueryResultPhoto
+from googleapiclient.discovery import build
+
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+
+# Try to load config from config.json, fallback to environment variables
+try:
+    with open("config.json", "r") as config_file:
+        config = json.load(config_file)
+
+    TELEGRAM_BOT_TOKEN = config["TELEGRAM_BOT_TOKEN"]
+    GOOGLE_API_KEY = config["GOOGLE_API_KEY"]
+    GOOGLE_CSE_ID = config["GOOGLE_CSE_ID"]
+    skip_google_search = config.get("skip_google_search", False)
+    logger.info("Configuration loaded from config.json")
+
+except (FileNotFoundError, json.JSONDecodeError) as e:
+    logger.warning(f"Could not load config.json: {e}. Falling back to environment variables.")
+
+    TELEGRAM_BOT_TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
+    GOOGLE_API_KEY = os.environ["GOOGLE_API_KEY"]
+    GOOGLE_CSE_ID = os.environ["GOOGLE_CSE_ID"]
+    skip_google_search = os.environ.get("SKIP_GOOGLE_SEARCH", "false").lower() == "true"
+
+
+# Initialize the bot and dispatcher
+
+router = Router()
+dp = Dispatcher()
+dp.include_router(router)
+bot = Bot(token=TELEGRAM_BOT_TOKEN)
+
+# File-based storage for counts
+count_file = "query_counts.json"
+# In-memory storage for counts
+user_query_counts = {}
+overall_query_count = 0
+counts = {}
+
+
+
+from aiogram import F
+
+@dp.message(F.text == "/stats")
+async def handle_stats(message: types.Message):
+    if message.from_user.id == 366684569:
+        try:
+            with open(count_file, "r") as f:
+                contents = f.read()
+            await message.reply(f"<pre>{contents}</pre>", parse_mode="HTML")
+        except FileNotFoundError:
+            await message.reply("Count file not found.")
+        except Exception as e:
+            await message.reply(f"Error reading stats: {e}")
+    else:
+        await message.reply("You are not authorized to view stats.")
+
+
+
+# Load counts from file
+def load_counts():
+    try:
+        with open(count_file, "r") as f:
+            return json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return {"users": {}, "overall": 0}
+
+
+# Save counts to file
+def save_counts(count_data):
+    with open(count_file, "w") as f:
+        json.dump(count_data, f, indent=2)
+
+
+# Function to track queries with file storage
+def increment_query_count(tg_user_id, tg_user_nickname=None):
+    global counts
+
+    # Increment overall count
+    counts["overall"] += 1
+
+    # Increment user-specific query count and store the nickname
+    user_id_str = str(tg_user_id)
+    if user_id_str not in counts["users"]:
+        counts["users"][user_id_str] = {"count": 0, "nickname": tg_user_nickname}
+
+    counts["users"][user_id_str]["count"] += 1
+    if tg_user_nickname:
+        counts["users"][user_id_str]["nickname"] = tg_user_nickname
+
+    # Save counts to file
+    save_counts(counts)
+
+
+# Fetch images from Google Custom Search API
+async def fetch_images(query):
+    logger.info(f"Fetching images for query: {query}")  # Log the query being processed
+
+    service = build("customsearch", "v1", developerKey=GOOGLE_API_KEY)
+    response = (
+        service.cse()
+        .list(q=query, cx=GOOGLE_CSE_ID, searchType="image", num=10)
+        .execute()
+    )
+
+    items = response.get("items", [])
+
+    # Log the result links
+    if items:
+        logger.info(f"Found {len(items)} results:")
+        # logger.info(f"Full response JSON: {json.dumps(response, indent=2)}")
+        # for item in items:
+        #    logger.info(f"Result link: {item.get('link')}")
+    else:
+        logger.info("No results found.")
+
+    return items
+
+
+# Return test images from lorempixel for testing purposes
+async def fetch_test_images():
+    logger.info("Skipping Google Search, returning test images from lorempixel.")
+    return [
+        {
+            "link": "https://lorempixel.com/640/480/nature/1/",
+            "image": {"thumbnailLink": "https://lorempixel.com/100/100/nature/1/"},
+            "title": "Sample Image 1",
+            "width": 640,
+            "height": 480,
+        },
+        {
+            "link": "https://lorempixel.com/640/480/nature/2/",
+            "image": {"thumbnailLink": "https://lorempixel.com/100/100/nature/2/"},
+            "title": "Sample Image 2",
+            "width": 640,
+            "height": 480,
+        },
+    ]
+
+
+# Handle inline query and send image results
+@dp.inline_query()
+async def inline_query_handler(query: types.InlineQuery):
+    if not query.query:
+        return
+
+    # Log the incoming query
+    logger.info(f"Received inline query from user {query.from_user.id}: {query.query}")
+
+    # Increment the counts with the user's nickname (if available)
+    tg_user_nickname = query.from_user.username  # Check if username exists
+    increment_query_count(query.from_user.id, tg_user_nickname)
+
+    # Fetch images based on the skip_google_search flag
+    if skip_google_search:
+        photos = await fetch_test_images()
+    else:
+        photos = await fetch_images(query.query)
+
+    results = []
+    for item in photos:
+        # Use 'link' or 'title' for the ID if 'cacheId' doesn't exist
+        image_id = str(
+            uuid.uuid4()
+        )  # item.get("cacheId", item["link"])  # Default to the 'link' if no 'cacheId'
+
+        # Ensure 'image' and 'thumbnailLink' exist, and provide a fallback
+        thumb_url = item["image"].get(
+            "thumbnailLink", "https://via.placeholder.com/150"
+        )  # Fallback thumbnail
+
+        # Create InlineQueryResultPhoto with more detailed fields
+        results.append(
+            InlineQueryResultPhoto(
+                type="photo",  # The required type for InlineQueryResultPhoto
+                id=image_id,
+                title=item.get("title", "No Title"),
+                thumbnail_url=thumb_url,  # Use the ensured thumb_url
+                photo_url=item["link"],
+                photo_width=item["image"].get("width", None),
+                photo_height=item["image"].get("height", None),
+                # photo_width=item.get("width"),  # Optionally include the photo width
+                # photo_height=item.get("height"),  # Optionally include the photo height
+                description=item.get("title"),  # Optional description based on title
+                # caption=f"Image: {item.get('title')}",  # Optional caption
+                parse_mode="HTML",  # Optional parse mode for caption
+                show_caption_above_media=False,  # Optional flag to control caption position
+            )
+        )
+
+    # Log the result links being sent to the user
+    #if results:
+    #    logger.info(f"Sending {len(results)} results.")
+    #    for result in results:
+    #        logger.info(f"Sending photo link: {result.photo_url}")
+    #else:
+    #    logger.info("No valid results to send.")
+
+    await query.answer(results)
+
+
+# Start polling for updates
+async def main():
+    global counts
+    counts = load_counts()
+    await dp.start_polling(bot)
+
+
+if __name__ == "__main__":
+    # Use asyncio.run to start the bot
+    asyncio.run(main())
+ asus-tuf@asus-tuf  ~/dev/tg-pic-bot   master ±  cat Dockerfile
+# Set the base image
+FROM python:3.9-slim
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Install dependencies
+COPY requirements.txt /app/
+RUN pip install -r requirements.txt
+
+# Copy the bot code into the container
+COPY . /app/
+
+# Set the entrypoint to run the bot
+CMD ["python", "app.py"]
