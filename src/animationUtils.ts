@@ -44,6 +44,7 @@ export function showConfetti() {
     });
   }
   let angle = 0;
+  let confettiTimeout: number;
   function drawConfetti() {
     if (!ctx) return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -67,12 +68,17 @@ export function showConfetti() {
       }
     }
     if (confetti.length > 0) {
-      requestAnimationFrame(drawConfetti);
+      confettiTimeout = window.setTimeout(() => requestAnimationFrame(drawConfetti), 1000 / 60);
     } else {
       setTimeout(() => { if (canvas.parentNode) canvas.parentNode.removeChild(canvas); }, 1000);
     }
   }
+  // Run confetti for 15 seconds, then clear
   drawConfetti();
+  setTimeout(() => {
+    confetti.length = 0; // Remove all confetti to end animation
+    if (confettiTimeout) clearTimeout(confettiTimeout);
+  }, 15000);
 }
 
 export function showCongratsEmojis() {
