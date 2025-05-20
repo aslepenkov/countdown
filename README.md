@@ -10,9 +10,7 @@
 
 ---
 
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/8950ce54-600f-4357-904e-403161bab7f1" alt="App Screenshot" width="400"/>
-</p>
+![image](https://github.com/user-attachments/assets/02f451bc-19a3-4a22-a4ed-bacf9826a36e)
 
 ---
 
