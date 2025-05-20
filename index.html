@@ -29,19 +29,16 @@
                 <div class="time-label">Seconds</div>
             </div>
         </div>
-        <div id="event-message" style="display: none; font-size: 1.5rem; color: #4d4d4d; margin-top: 20px;">🎉 Event
-            Started!</div>
+        <div id="event-message" class="event-message"
+            style="display: none; font-size: 1.5rem; color: #4d4d4d; margin-top: 20px;">🎉 Event Started!</div>
         <button class="fake-button" id="set-date-button">Set New Date</button>
-        <!-- <div id="debug" style="margin-top: 20px; font-size: 0.9rem; color: #888;"></div> -->
     </div>
-
-    <!-- Popup HTML -->
     <div class="popup" id="popup">
         <h3>Set New Countdown Date</h3>
         <input type="datetime-local" id="new-date">
         <button id="save-date-button">Save</button>
     </div>
-    <script type="module" src="/src/main.js"></script>
+    <script type="module" src="./src/main.ts"></script>
 </body>
 
 </html>
