@@ -1,4 +1,4 @@
- * {
+* {
    margin: 0;
    padding: 0;
    box-sizing: border-box;
@@ -121,3 +121,32 @@
  .popup button:active {
    box-shadow: inset 5px 5px 10px #d4d4d4, inset -5px -5px 10px #ffffff;
  }
+
+/* Emoji Animation */
+@keyframes shakeAndGrow {
+  0% { 
+    transform: scale(1, var(--flip)) rotate(0deg);
+    height: 10vh;
+    font-size: 10vh;
+  }
+  25% { 
+    transform: scale(2, calc(2 * var(--flip))) rotate(-15deg);
+    height: 20vh;
+    font-size: 20vh;
+  }
+  50% { 
+    transform: scale(3, calc(3 * var(--flip))) rotate(15deg);
+    height: 30vh;
+    font-size: 30vh;
+  }
+  75% { 
+    transform: scale(2, calc(2 * var(--flip))) rotate(-10deg);
+    height: 20vh;
+    font-size: 20vh;
+  }
+  100% { 
+    transform: scale(1, var(--flip)) rotate(0deg);
+    height: 10vh;
+    font-size: 10vh;
+  }
+}
