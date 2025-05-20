@@ -1,255 +1,47 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Skeuomorphic Countdown Timer with Date Picker</title>
-  <style>
-    /* Reset Styles */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html,
-    body {
-      height: 100%;
-    }
-
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-family: 'Arial', sans-serif;
-      background: linear-gradient(145deg, #e0e0e0, #ffffff);
-      box-shadow: inset 10px 10px 20px #cacaca, inset -10px -10px 20px #ffffff;
-    }
-
-    /* Countdown Timer Container */
-    .countdown {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      width: 90vw;
-      height: 90vh;
-      max-width: 500px;
-      max-height: 500px;
-      background: #f0f0f0;
-      border-radius: 30px;
-      box-shadow: inset 10px 10px 30px #c0c0c0, inset -10px -10px 30px #ffffff, 10px 10px 20px rgba(0, 0, 0, 0.1);
-      text-align: center;
-    }
-
-    /* Timer Display (Time Units) */
-    .time {
-      display: flex;
-      gap: 1.5rem;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .time-unit {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .time-number {
-      font-size: 4rem;
-      font-weight: bold;
-      color: #4d4d4d;
-      text-shadow: 2px 2px 0px #d9d9d9, -2px -2px 2px #ffffff;
-    }
-
-    .time-label {
-      font-size: 1rem;
-      font-weight: 600;
-      color: #888;
-      text-transform: uppercase;
-    }
-
-    /* Neumorphic Button */
-    .fake-button {
-      margin-top: 2rem;
-      padding: 0.8rem 2rem;
-      border: none;
-      border-radius: 25px;
-      background: linear-gradient(145deg, #eaeaea, #ffffff);
-      color: #4d4d4d;
-      font-size: 1rem;
-      font-weight: bold;
-      box-shadow: 5px 5px 10px #d4d4d4, -5px -5px 10px #ffffff;
-      cursor: pointer;
-      transition: all 0.2s ease-out;
-    }
-
-    .fake-button:active {
-      box-shadow: inset 5px 5px 10px #d4d4d4, inset -5px -5px 10px #ffffff;
-    }
-
-    /* Popup Container */
-    .popup {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      padding: 20px;
-      background: #fefefe;
-      border-radius: 15px;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), inset 5px 5px 10px #d4d4d4, inset -5px -5px 10px #ffffff;
-    }
-
-    .popup input {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      font-size: 1rem;
-      border: none;
-      border-radius: 10px;
-      box-shadow: inset 4px 4px 8px #d4d4d4, inset -4px -4px 8px #ffffff;
-    }
-
-    .popup button {
-      margin-top: 10px;
-      padding: 0.8rem 1.5rem;
-      border: none;
-      border-radius: 25px;
-      background: linear-gradient(145deg, #eaeaea, #ffffff);
-      color: #4d4d4d;
-      font-size: 1rem;
-      font-weight: bold;
-      box-shadow: 5px 5px 10px #d4d4d4, -5px -5px 10px #ffffff;
-      cursor: pointer;
-      transition: all 0.2s ease-out;
-    }
-
-    .popup button:active {
-      box-shadow: inset 5px 5px 10px #d4d4d4, inset -5px -5px 10px #ffffff;
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./src/style.css">
+    <title>Vite App</title>
 </head>
 
 <body>
-  <div class="countdown">
-    <div class="time">
-      <div class="time-unit">
-        <div class="time-number" id="days">0</div>
-        <div class="time-label">Days</div>
-      </div>
-      <div class="time-unit">
-        <div class="time-number" id="hours">0</div>
-        <div class="time-label">Hours</div>
-      </div>
-      <div class="time-unit">
-        <div class="time-number" id="minutes">0</div>
-        <div class="time-label">Minutes</div>
-      </div>
-      <div class="time-unit">
-        <div class="time-number" id="seconds">0</div>
-        <div class="time-label">Seconds</div>
-      </div>
+    <div class="countdown">
+        <div class="time">
+            <div class="time-unit">
+                <div class="time-number" id="days">0</div>
+                <div class="time-label">Days</div>
+            </div>
+            <div class="time-unit">
+                <div class="time-number" id="hours">0</div>
+                <div class="time-label">Hours</div>
+            </div>
+            <div class="time-unit">
+                <div class="time-number" id="minutes">0</div>
+                <div class="time-label">Minutes</div>
+            </div>
+            <div class="time-unit">
+                <div class="time-number" id="seconds">0</div>
+                <div class="time-label">Seconds</div>
+            </div>
+        </div>
+        <div id="event-message" style="display: none; font-size: 1.5rem; color: #4d4d4d; margin-top: 20px;">🎉 Event
+            Started!</div>
+        <button class="fake-button" id="set-date-button">Set New Date</button>
+        <!-- <div id="debug" style="margin-top: 20px; font-size: 0.9rem; color: #888;"></div> -->
     </div>
-    <div id="event-message" style="display: none; font-size: 1.5rem; color: #4d4d4d; margin-top: 20px;">🎉 Event
-      Started!</div>
-    <button class="fake-button" id="set-date-button">Set New Date</button>
-    <!-- <div id="debug" style="margin-top: 20px; font-size: 0.9rem; color: #888;"></div> -->
-  </div>
 
-  <!-- Popup HTML -->
-  <div class="popup" id="popup">
-    <h3>Set New Countdown Date</h3>
-    <input type="datetime-local" id="new-date">
-    <button id="save-date-button">Save</button>
-  </div>
-
-  <script>
-    const debugElement = document.getElementById('debug');
-    // Reference to elements
-    const daysEl = document.getElementById('days');
-    const hoursEl = document.getElementById('hours');
-    const minutesEl = document.getElementById('minutes');
-    const secondsEl = document.getElementById('seconds');
-    const popup = document.getElementById('popup');
-    const setDateButton = document.getElementById('set-date-button');
-    const saveDateButton = document.getElementById('save-date-button');
-    const newDateInput = document.getElementById('new-date');
-
-    // Countdown update function
-    function updateCountdown() {
-      let targetDate = localStorage.getItem('targetDate')
-        ? parseInt(localStorage.getItem('targetDate'))
-        : new Date('May 23, 2025 23:59:59').getTime();
-
-      const now = new Date().getTime();
-      const distance = targetDate - now;
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-      daysEl.textContent = days >= 0 ? days : 0;
-      hoursEl.textContent = hours >= 0 ? hours : 0;
-      minutesEl.textContent = minutes >= 0 ? minutes : 0;
-      secondsEl.textContent = seconds >= 0 ? seconds : 0;
-
-      if (distance < 0) {
-        // Countdown is over
-        document.querySelector('.time').style.display = 'none'; // Hide the timer
-        document.getElementById('event-message').style.display = 'block'; // Show the event message
-        clearInterval(interval); // Stop the timer
-      } else {
-        // Update the timer numbers
-        document.getElementById('days').textContent = days >= 0 ? days : 0;
-        document.getElementById('hours').textContent = hours >= 0 ? hours : 0;
-        document.getElementById('minutes').textContent = minutes >= 0 ? minutes : 0;
-        document.getElementById('seconds').textContent = seconds >= 0 ? seconds : 0;
-
-        // Make sure the timer is visible and event message is hidden
-        document.querySelector('.time').style.display = 'flex';
-        document.getElementById('event-message').style.display = 'none';
-      }
-    }
-    function updateDebugDisplay() {
-      const storedDate = localStorage.getItem('targetDate');
-      let debugInfo = {};
-
-      // Check if targetDate exists in localStorage
-      if (storedDate) {
-        const humanReadableDate = new Date(parseInt(storedDate)).toLocaleString(); // Convert to readable date-time
-        debugInfo.targetDate = `${storedDate} (${humanReadableDate})`; // Show both timestamp and human-readable date
-      } else {
-        debugInfo.targetDate = 'Not Set';
-      }
-
-      debugElement.textContent = `LocalStorage: ${JSON.stringify(debugInfo, null, 2)}`;
-    }
-
-    // Show popup
-    setDateButton.addEventListener('click', () => {
-      popup.style.display = 'block';
-    });
-
-    // Update debug display whenever targetDate is set or loaded
-    saveDateButton.addEventListener('click', () => {
-      const newDate = newDateInput.value;
-      if (newDate) {
-        targetDate = new Date(newDate).getTime();
-        localStorage.setItem('targetDate', targetDate); // Save in localStorage
-        // updateDebugDisplay(); // Refresh debug info
-        popup.style.display = 'none'; // Hide popup
-        updateCountdown();
-
-      }
-    });
-
-    // Update countdown every second
-    const interval = setInterval(updateCountdown, 1000);
-    updateCountdown();
-  </script>
+    <!-- Popup HTML -->
+    <div class="popup" id="popup">
+        <h3>Set New Countdown Date</h3>
+        <input type="datetime-local" id="new-date">
+        <button id="save-date-button">Save</button>
+    </div>
+    <script type="module" src="/src/main.js"></script>
 </body>
 
 </html>

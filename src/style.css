@@ -1,0 +1,123 @@
+ * {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+ }
+
+ html,
+ body {
+   height: 100%;
+ }
+
+ body {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   font-family: 'Arial', sans-serif;
+   background: linear-gradient(145deg, #e0e0e0, #ffffff);
+   box-shadow: inset 10px 10px 20px #cacaca, inset -10px -10px 20px #ffffff;
+ }
+
+ /* Countdown Timer Container */
+ .countdown {
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   width: 90vw;
+   height: 90vh;
+   max-width: 500px;
+   max-height: 500px;
+   background: #f0f0f0;
+   border-radius: 30px;
+   box-shadow: inset 10px 10px 30px #c0c0c0, inset -10px -10px 30px #ffffff, 10px 10px 20px rgba(0, 0, 0, 0.1);
+   text-align: center;
+ }
+
+ /* Timer Display (Time Units) */
+ .time {
+   display: flex;
+   gap: 1.5rem;
+   justify-content: center;
+   align-items: center;
+ }
+
+ .time-unit {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+ }
+
+ .time-number {
+   font-size: 4rem;
+   font-weight: bold;
+   color: #4d4d4d;
+   text-shadow: 2px 2px 0px #d9d9d9, -2px -2px 2px #ffffff;
+ }
+
+ .time-label {
+   font-size: 1rem;
+   font-weight: 600;
+   color: #888;
+   text-transform: uppercase;
+ }
+
+ /* Neumorphic Button */
+ .fake-button {
+   margin-top: 2rem;
+   padding: 0.8rem 2rem;
+   border: none;
+   border-radius: 25px;
+   background: linear-gradient(145deg, #eaeaea, #ffffff);
+   color: #4d4d4d;
+   font-size: 1rem;
+   font-weight: bold;
+   box-shadow: 5px 5px 10px #d4d4d4, -5px -5px 10px #ffffff;
+   cursor: pointer;
+   transition: all 0.2s ease-out;
+ }
+
+ .fake-button:active {
+   box-shadow: inset 5px 5px 10px #d4d4d4, inset -5px -5px 10px #ffffff;
+ }
+
+ /* Popup Container */
+ .popup {
+   display: none;
+   position: fixed;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+   padding: 20px;
+   background: #fefefe;
+   border-radius: 15px;
+   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), inset 5px 5px 10px #d4d4d4, inset -5px -5px 10px #ffffff;
+ }
+
+ .popup input {
+   width: 100%;
+   padding: 10px;
+   margin: 10px 0;
+   font-size: 1rem;
+   border: none;
+   border-radius: 10px;
+   box-shadow: inset 4px 4px 8px #d4d4d4, inset -4px -4px 8px #ffffff;
+ }
+
+ .popup button {
+   margin-top: 10px;
+   padding: 0.8rem 1.5rem;
+   border: none;
+   border-radius: 25px;
+   background: linear-gradient(145deg, #eaeaea, #ffffff);
+   color: #4d4d4d;
+   font-size: 1rem;
+   font-weight: bold;
+   box-shadow: 5px 5px 10px #d4d4d4, -5px -5px 10px #ffffff;
+   cursor: pointer;
+   transition: all 0.2s ease-out;
+ }
+
+ .popup button:active {
+   box-shadow: inset 5px 5px 10px #d4d4d4, inset -5px -5px 10px #ffffff;
+ }
