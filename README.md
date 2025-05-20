@@ -10,20 +10,8 @@
 
 ---
 
-## 🎨 UI Inspiration
-
-- **Skeuomorphic design**: Soft shadows, rounded corners, and a tactile, modern look.
-- Inspired by neumorphism and classic digital timers.
-- Popup date picker for a smooth, app-like experience.
-
----
-
-## 📸 Screenshot
-
 <p align="center">
   <img src="https://github.com/user-attachments/assets/8950ce54-600f-4357-904e-403161bab7f1" alt="App Screenshot" width="400"/>
-  <br>
-  <i>Screenshot placeholder &mdash; replace with your own!</i>
 </p>
 
 ---
@@ -35,6 +23,14 @@
 - LocalStorage persistence
 - Confetti and animated emojis when the countdown ends
 - 100% static, no frameworks, lightning fast
+
+---
+
+## 🎨 UI Inspiration
+
+- **Skeuomorphic design**: Soft shadows, rounded corners, and a tactile, modern look.
+- Inspired by neumorphism and classic digital timers.
+- Popup date picker for a smooth, app-like experience.
 
 ---
 
