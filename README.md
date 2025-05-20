@@ -21,8 +21,7 @@
 ## 📸 Screenshot
 
 <p align="center">
-  ![image](https://github.com/user-attachments/assets/8950ce54-600f-4357-904e-403161bab7f1)
-
+  <img src="https://github.com/user-attachments/assets/8950ce54-600f-4357-904e-403161bab7f1" alt="App Screenshot" width="400"/>
   <br>
   <i>Screenshot placeholder &mdash; replace with your own!</i>
 </p>
