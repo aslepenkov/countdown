@@ -131,19 +131,19 @@ body {
   }
 
   25% {
-    transform: translate(calc(var(--direction) * 10vw), -15vh) scale(2) rotate(-15deg);
+    transform: translate(10vw, -15vh) scale(2) rotate(-15deg);
     height: 20vh;
     font-size: 20vh;
   }
 
   50% {
-    transform: translate(calc(var(--direction) * 15vw), -25vh) scale(3) rotate(15deg);
+    transform: translate(15vw, -25vh) scale(3) rotate(15deg);
     height: 30vh;
     font-size: 30vh;
   }
 
   75% {
-    transform: translate(calc(var(--direction) * 10vw), -15vh) scale(2) rotate(-10deg);
+    transform: translate(10vw, -15vh) scale(2) rotate(-10deg);
     height: 20vh;
     font-size: 20vh;
   }
@@ -166,13 +166,11 @@ body {
 
 .emoji-container.left {
   left: 10vh;
-  --direction: 1; /* Move right */
 }
 
 .emoji-container.right {
   right: 10vh;
   transform: scaleX(-1);
-  --direction: -1; /* Move left */
 }
 
 .emoji {
