@@ -91,51 +91,37 @@ function removeElementById(id: string): void {
 }
 
 export function hideCongratsEmojis(): void {
-  removeElementById('congrats-emoji-left');
-  removeElementById('congrats-emoji-right');
+  removeElementById('congrats-emoji-left-container');
+  removeElementById('congrats-emoji-right-container');
 }
 
-const BASE_EMOJI_STYLES = {
-  position: 'fixed',
-  bottom: '10vh',
-  height: '10vh',
-  fontSize: '10vh',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  zIndex: '1001',
-  opacity: '0',
-} as const;
+
 
 function createEmoji(id: string, isRight: boolean): HTMLElement {
-  const existingEmoji = document.getElementById(id);
-  if (existingEmoji) return existingEmoji;
+  const existingContainer = document.getElementById(`${id}-container`);
+  if (existingContainer) return existingContainer;
+
+  const container = document.createElement('div');
+  container.id = `${id}-container`;
+  container.className = `emoji-container ${isRight ? 'right' : 'left'}`;
 
   const emoji = document.createElement('div');
   emoji.id = id;
+  emoji.className = 'emoji';
   emoji.textContent = '🎉';
 
-  // Set the flip direction using CSS custom property
-  emoji.style.setProperty('--flip', isRight ? '-1' : '1');
-
-  // Apply styles
-  Object.assign(emoji.style, BASE_EMOJI_STYLES, {
-    [isRight ? 'right' : 'left']: '10vh',
-    //transform: 'scale(0)',
-  });
-
-  document.body.appendChild(emoji);
+  container.appendChild(emoji);
+  document.body.appendChild(container);
 
   // Force browser reflow to ensure animation plays
   emoji.getBoundingClientRect();
 
   // Animate in
   requestAnimationFrame(() => {
-    emoji.style.opacity = '1';
-    emoji.style.animation = 'shakeAndGrow 2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
+    emoji.classList.add('celebrating');
   });
 
-  return emoji;
+  return container;
 }
 
 export function showCongratsEmojis(): void {
