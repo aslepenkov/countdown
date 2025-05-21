@@ -95,6 +95,7 @@ class Dial {
   private dial: HTMLElement;
   private indicator: HTMLElement;
   private label: HTMLElement;
+  private notches: HTMLElement;
   private angle: number = 0;
   private isDragging: boolean = false;
   private startAngle: number = 0;
@@ -104,9 +105,35 @@ class Dial {
     this.dial = document.getElementById(dialId)!;
     this.indicator = document.getElementById(indicatorId)!;
     this.label = document.getElementById(labelId)!;
+    this.notches = document.getElementById('dial-notches')!;
     this.onChange = onChange;
+    this.renderNotches();
     this.attachEvents();
     this.updateUI();
+  }
+
+  private renderNotches() {
+    // Render 60 notches, one for each minute, evenly spaced around the dial
+    this.notches.innerHTML = '';
+    for (let i = 0; i < 60; i++) {
+      const notch = document.createElement('div');
+      notch.className = 'dial-notch';
+      // Place each notch at the correct angle around the dial
+      notch.style.transform = `rotate(${i * 6}deg) translateY(-130px)`;
+      this.notches.appendChild(notch);
+    }
+  }
+
+  private updateNotches(minutes: number) {
+    const notches = this.notches.children;
+    for (let i = 0; i < 60; i++) {
+      const notch = notches[i] as HTMLElement;
+      if (i < minutes) {
+        notch.classList.add('glow');
+      } else {
+        notch.classList.remove('glow');
+      }
+    }
   }
 
   private attachEvents() {
@@ -151,8 +178,8 @@ class Dial {
     if (!this.isDragging) return;
     e.preventDefault();
     const angle = this.getAngleFromEvent(e) - this.startAngle;
-    // Clamp angle to [0, 360)
-    this.angle = ((angle % 360) + 360) % 360;
+    // Snap to nearest degree (360 positions)
+    this.angle = Math.round(((angle % 360) + 360) % 360);
     this.updateUI();
     this.emitChange();
   };
@@ -162,11 +189,12 @@ class Dial {
   };
 
   private updateUI() {
-    // Rotate the dial itself, so the notch moves with it
+    // Snap angle to nearest degree for 360 positions
+    this.angle = Math.round(this.angle) % 360;
     this.dial.style.transform = `rotate(${this.angle}deg)`;
-    // The indicator is always at the top of the dial in dial-local coordinates
     const minutes = Math.round(this.angle / 6); // 360deg = 60min
     this.label.textContent = `${minutes} min`;
+    this.updateNotches(minutes);
   }
 
   private emitChange() {

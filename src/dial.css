@@ -3,9 +3,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  width: 100vw;
-  /* Static shadow for the dial */
+  /* Match dial size for perfect shadow alignment */
+  width: 300px;
+  height: 300px;
+  box-shadow: 41px 41px 82px #bebebe, -41px -41px 82px #ffffff;
+  border-radius: 50%;
   background: none;
 }
 .dial {
@@ -13,7 +15,6 @@
   height: 300px;
   border-radius: 50%;
   background: #e0e0e0;
-  box-shadow: 41px 41px 82px #bebebe, -41px -41px 82px #ffffff;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -22,9 +23,12 @@
   touch-action: none;
   cursor: grab;
   transition: box-shadow 0.2s, transform 0.2s cubic-bezier(.4,2,.6,1);
+  /* Remove box-shadow from here */
+  box-shadow: none;
 }
 .dial:active {
-  box-shadow: 20px 20px 40px #bebebe, -20px -20px 40px #ffffff;
+  /* Optional: add a subtle effect for pressing, but keep shadow static */
+  box-shadow: none;
   cursor: grabbing;
 }
 .dial-indicator {
@@ -46,4 +50,32 @@
   font-size: 2rem;
   color: #4d4d4d;
   font-weight: bold;
+}
+.dial-notches {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+.dial-notch {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 4px;
+  height: 16px;
+  background: #ccc;
+  border-radius: 2px;
+  opacity: 0.7;
+  box-shadow: 0 0 4px #fff8;
+  /* Center each notch, then rotate and move outward */
+  transform: rotate(var(--angle, 0deg)) translateY(-130px) translate(-50%, -50%);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.dial-notch.glow {
+  background: #6f6;
+  box-shadow: 0 0 8px 2px #8f8, 0 0 2px #fff;
+  opacity: 1;
 }
